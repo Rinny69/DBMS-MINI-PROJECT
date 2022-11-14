@@ -1,0 +1,26 @@
+import numpy as np
+import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
+anime = pd.read_csv("anime.csv")
+anime.head()
+anime.shape
+(12294, 7)
+anime.describe()
+nime.describe(include=['O'])
+anime.isnull().sum()
+anime[anime['name'] == "Saru Kani Gassen"]
+anime_with_rating = anime.copy().dropna(subset=['rating'])
+anime_with_rating.isnull().sum()
+anime_with_rating.head()
+m = anime_with_rating['members'].quantile(0.75)
+m
+9485.5
+C = anime_with_rating['rating'].mean()
+C
+6.473901690981445
+def weighted_rating(df, m, C):
+    term = df['members'] / (m + df['members'])
+    return df['rating'] * term + (1-term) * C
+    anime_with_rating["weighted_rating"] = anime_with_rating.apply(weighted_rating, axis=1, args=(m, C))
+anime_with_rating.head()
